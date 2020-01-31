@@ -337,7 +337,6 @@ const ELITE_BERSERK = "Elite Berserk";
 const CHIEFTAINS = "Chieftains";
 const BERSERKERGANG = "Berserkergang";
 
-
 class Tree {
     constructor() {
         this.offsets = {
@@ -528,13 +527,14 @@ function checkIdUnique(tree) {
     }
 }
 
+let defaultDisabled = [EAGLE_SCOUT, EAGLE_WARRIOR, ELITE_EAGLE_WARRIOR, BATTLE_ELEPHANT,
+  ELITE_BATTLE_ELEPHANT, STEPPE_LANCER, ELITE_STEPPE_LANCER];
+
 function resetToDefault(tree) {
     SVG.select('.cross').animate(animation_duration).attr({'fill-opacity': 0});
     disableUniqueUnits(tree);
     enable([], [UNIQUE_UNIT, ELITE_UNIQUE_UNIT], []);
-    disable([], [EAGLE_SCOUT, EAGLE_WARRIOR, ELITE_EAGLE_WARRIOR], []);
-    disable([], [BATTLE_ELEPHANT, ELITE_BATTLE_ELEPHANT], []);
-    disable([], [STEPPE_LANCER, ELITE_STEPPE_LANCER], []);
+    disable([], defaultDisabled, []);
     disable([KREPOST, FEITORIA], [], []);
 }
 
@@ -606,6 +606,12 @@ function unique(names, monk_prefix) {
     SVG.get('unit_' + formatId(MONK) + '_img').load('img/Units/' + monk_prefix + 'monk.png');
 }
 
+let horseDisabled = [STABLE, 
+  SCOUT_CAVALRY, LIGHT_CAVALRY, HUSSAR,
+  BLOODLINES, KNIGHT, CAVALIER, PALADIN,
+  CAMEL_RIDER, HEAVY_CAMEL_RIDER, HUSBANDRY,
+  CAVALRY_ARCHER, HEAVY_CAV_ARCHER, SCALE_BARDING_ARMOR,
+  CHAIN_BARDING_ARMOR, PLATE_BARDING_ARMOR, PARTHIAN_TACTICS];
 
 function disableHorses(tree) {
     let stable_index = -1;

@@ -297,10 +297,9 @@
             if (type === "UNIT") {
                 // Make sure this unit isn't disabled for this civ
                 // if not enabled and default is disabled -> bad
-                if (civBreakdown[`${civ}`]['enabled']['units'] &&
-                    !civBreakdown[`${civ}`]['enabled']['units'].includes(name)
-                    && defaultDisabled.includes(name)
-                    ) {
+                if (defaultDisabled.includes(name) && 
+                    (!civBreakdown[`${civ}`]['enabled']['units'] ||
+                     !civBreakdown[`${civ}`]['enabled']['units'].includes(name))) {
                   continue;
                 // if disabled -> bad
                 } else if (civBreakdown[`${civ}`]['disabled']['units']
@@ -310,14 +309,20 @@
                 }
                 console.log("I am a unit, and I am in " + civ);
             } else if (type === "UNIQUEUNIT") {
+              console.log(civBreakdown[`${civ}`]['enabled']['unique']);
+              console.log(civBreakdown[`${civ}`]['enabled']['units']);
               // Make sure this unique unit is specifically enabled for this civ
               // Sometimes "unique" units are also units e.g. genitour
-              if ((civBreakdown[`${civ}`]['enabled']['unique']
-                && !civBreakdown[`${civ}`]['enabled']['unique'].includes(name))
-                || (civBreakdown[`${civ}`]['enabled']['units'] &&
-                    !civBreakdown[`${civ}`]['enabled']['units'].includes(name))) {
+              if (   (civBreakdown[`${civ}`]['enabled']['unique']
+                  && !civBreakdown[`${civ}`]['enabled']['unique'].includes(name))
+
+                  && (!civBreakdown[`${civ}`]['enabled']['units'] ||
+                  (civBreakdown[`${civ}`]['enabled']['units']
+                  && !civBreakdown[`${civ}`]['enabled']['units'].includes(name)))) {
                 continue;
+                
               }
+              console.log("I am a uniqueunit, and I am in " + civ);
             } else if (type === "TECHNOLOGY") {
               // Make sure this technology isn't disabled for this civ.
               if (civBreakdown[`${civ}`]['disabled']['techs']
@@ -332,10 +337,10 @@
                 continue;
               }
             }
-            if (civBreakdown[`${civ}`]['enabled']['units']
-                && civBreakdown[`${civ}`]['enabled']['units'].includes(name)) {
-              console.log("i am in " + civ);
-            }
+            // if (civBreakdown[`${civ}`]['enabled']['units']
+            //     && civBreakdown[`${civ}`]['enabled']['units'].includes(name)) {
+            //   console.log("i am in " + civ);
+            // }
           }
 
           let xRefLink = document.createElement('button');

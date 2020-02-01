@@ -551,6 +551,9 @@ const civBreakdown = JSON.parse(`{
     "disableHorses": true,
     "enabled": {
       "units": [
+        "Eagle Scout",
+        "Eagle Warrior",
+        "Elite Eagle Warrior",
         "Slinger"
       ],
       "unique": [
@@ -1391,4 +1394,5 @@ const civBreakdown = JSON.parse(`{
       ]
     }
   }
-}`);
+}
+`);

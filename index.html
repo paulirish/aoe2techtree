@@ -282,66 +282,7 @@
 
         let xRefTable = document.createElement('div');
 
-        console.log("i am a " + name);
-
-        // Get all civs
         for (let civ of Object.keys(data.civs)) {
-          // Make sure this civ exists
-          if (civBreakdown[`${civ}`]) {
-            console.log(type);
-            // Fast-Fail horses if civ disablesHorses
-            if (civBreakdown[`${civ}`]['disableHorses']
-                && horseDisabled.includes(name)) {
-              continue;
-            }
-            if (type === "UNIT") {
-                // Make sure this unit isn't disabled for this civ
-                // if not enabled and default is disabled -> bad
-                if (defaultDisabled.includes(name) && 
-                    (!civBreakdown[`${civ}`]['enabled']['units'] ||
-                     !civBreakdown[`${civ}`]['enabled']['units'].includes(name))) {
-                  continue;
-                // if disabled -> bad
-                } else if (civBreakdown[`${civ}`]['disabled']['units']
-                           && civBreakdown[`${civ}`]['disabled']['units'].includes(name)
-                           ) {
-                  continue;
-                }
-                console.log("I am a unit, and I am in " + civ);
-            } else if (type === "UNIQUEUNIT") {
-              console.log(civBreakdown[`${civ}`]['enabled']['unique']);
-              console.log(civBreakdown[`${civ}`]['enabled']['units']);
-              // Make sure this unique unit is specifically enabled for this civ
-              // Sometimes "unique" units are also units e.g. genitour
-              if (   (civBreakdown[`${civ}`]['enabled']['unique']
-                  && !civBreakdown[`${civ}`]['enabled']['unique'].includes(name))
-
-                  && (!civBreakdown[`${civ}`]['enabled']['units'] ||
-                  (civBreakdown[`${civ}`]['enabled']['units']
-                  && !civBreakdown[`${civ}`]['enabled']['units'].includes(name)))) {
-                continue;
-                
-              }
-              console.log("I am a uniqueunit, and I am in " + civ);
-            } else if (type === "TECHNOLOGY") {
-              // Make sure this technology isn't disabled for this civ.
-              if (civBreakdown[`${civ}`]['disabled']['techs']
-                  && civBreakdown[`${civ}`]['disabled']['techs'].includes(name)) {
-                continue;
-              }
-            }
-            else if (type === "BUILDING") {
-              // Make sure this building isn't disabled for this civ.
-              if (civBreakdown[`${civ}`]['disabled']['buildings']
-                  && civBreakdown[`${civ}`]['disabled']['buildings'].includes(name)) {
-                continue;
-              }
-            }
-            // if (civBreakdown[`${civ}`]['enabled']['units']
-            //     && civBreakdown[`${civ}`]['enabled']['units'].includes(name)) {
-            //   console.log("i am in " + civ);
-            // }
-          }
 
           let xRefLink = document.createElement('button');
           xRefLink.addEventListener('click', function() {
@@ -359,6 +300,70 @@
           xRefImage.src = `./img/Civs/${civ}.png`;
           xRefImage.style.width = "30px";
           xRefImage.style.height = "30px";
+          xRefImage.title = `${civ}`;
+
+          console.log("i am a " + name);
+
+          // Get all civs
+         
+            // Make sure this civ exists
+            if (civBreakdown[`${civ}`]) {
+              console.log(type);
+              // Fast-Fail horses if civ disablesHorses
+              if (civBreakdown[`${civ}`]['disableHorses']
+                  && horseDisabled.includes(name)) {
+                    xRefImage.style.opacity = '20%';
+              }
+              if (type === "UNIT") {
+                  // Make sure this unit isn't disabled for this civ
+                  // if not enabled and default is disabled -> bad
+                  if (defaultDisabled.includes(name) && 
+                      (!civBreakdown[`${civ}`]['enabled']['units'] ||
+                      !civBreakdown[`${civ}`]['enabled']['units'].includes(name))) {
+                    xRefImage.style.opacity = '20%';
+                  // if disabled -> bad
+                  } else if (civBreakdown[`${civ}`]['disabled']['units']
+                            && civBreakdown[`${civ}`]['disabled']['units'].includes(name)
+                            ) {
+                    xRefImage.style.opacity = '20%';
+                  }
+                  console.log("I am a unit, and I am in " + civ);
+              } else if (type === "UNIQUEUNIT") {
+                console.log(civBreakdown[`${civ}`]['enabled']['unique']);
+                console.log(civBreakdown[`${civ}`]['enabled']['units']);
+                // Make sure this unique unit is specifically enabled for this civ
+                // Sometimes "unique" units are also units e.g. genitour
+                if (   (civBreakdown[`${civ}`]['enabled']['unique']
+                    && !civBreakdown[`${civ}`]['enabled']['unique'].includes(name))
+
+                    && (!civBreakdown[`${civ}`]['enabled']['units'] ||
+                    (civBreakdown[`${civ}`]['enabled']['units']
+                    && !civBreakdown[`${civ}`]['enabled']['units'].includes(name)))) {
+                  xRefImage.style.opacity = '20%';
+                  
+                }
+                console.log("I am a uniqueunit, and I am in " + civ);
+              } else if (type === "TECHNOLOGY") {
+                // Make sure this technology isn't disabled for this civ.
+                if (civBreakdown[`${civ}`]['disabled']['techs']
+                    && civBreakdown[`${civ}`]['disabled']['techs'].includes(name)) {
+                  xRefImage.style.opacity = '20%';
+                }
+              }
+              else if (type === "BUILDING") {
+                // Make sure this building isn't disabled for this civ.
+                if (civBreakdown[`${civ}`]['disabled']['buildings']
+                    && civBreakdown[`${civ}`]['disabled']['buildings'].includes(name)) {
+                  xRefImage.style.opacity = '20%';
+                }
+              }
+              // if (civBreakdown[`${civ}`]['enabled']['units']
+              //     && civBreakdown[`${civ}`]['enabled']['units'].includes(name)) {
+              //   console.log("i am in " + civ);
+              // }
+            }
+          
+
 
           xRefLink.appendChild(xRefImage);
           xRefTable.appendChild(xRefLink);

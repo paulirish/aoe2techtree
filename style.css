@@ -3,6 +3,7 @@
             width: 100%;
             height: 100%;
             box-sizing: border-box;
+            --xRef-badge-size: 30px;
         }
 
         body {
@@ -38,6 +39,12 @@
             border: 2px solid #bbb;
             padding: 0.2rem;
             font-size: 10pt;
+        }
+
+        /* Style for helptext Cross-Reference badges */
+        #helptext #helptext__x_ref div button img {
+          width: var(--xRef-badge-size);
+          height: var(var(--xRef-badge-size));
         }
 
         #wrapper {

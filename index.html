@@ -79,8 +79,8 @@
     </div>
 </div>
 <script src="js/svg.min.js"></script>
-<script src="js/civ_breakdown.json.js"></script>
 <script src="js/techtree.js"></script>
+<script src="js/civ_config.js"></script>
 <script src="js/civs.js"></script>
 <script type="text/javascript">
     var tree = getDefaultTree();
@@ -273,12 +273,9 @@
             entitytype = 'techs';
         }
         let xRefLinks = document.createElement('div');
-
-        let xRefHeader = document.createElement('span');
-
-        xRefHeader.innerText = "Cross Reference";
-        xRefLinks.appendChild(xRefHeader);
-        // let meta = data.meta[entitytype][name];
+        xRefLinks.style.maxWidth = "calc(30px * 7)";
+        xRefLinks.style.margin = "auto";
+        xRefLinks.style.paddingTop = "0.2rem";
 
         let xRefTable = document.createElement('div');
 
@@ -307,10 +304,10 @@
           // Get all civs
          
             // Make sure this civ exists
-            if (civBreakdown[`${civ}`]) {
+            if (civsConfig[`${civ}`]) {
               console.log(type);
               // Fast-Fail horses if civ disablesHorses
-              if (civBreakdown[`${civ}`]['disableHorses']
+              if (civsConfig[`${civ}`]['disableHorses']
                   && horseDisabled.includes(name)) {
                     xRefImage.style.opacity = '20%';
               }
@@ -318,35 +315,35 @@
                   // Make sure this unit isn't disabled for this civ
                   // if not enabled and default is disabled -> bad
                   if (defaultDisabled.includes(name) && 
-                      (!civBreakdown[`${civ}`]['enabled']['units'] ||
-                      !civBreakdown[`${civ}`]['enabled']['units'].includes(name))) {
+                      (!civsConfig[`${civ}`]['enabled']['units'] ||
+                      !civsConfig[`${civ}`]['enabled']['units'].includes(name))) {
                     xRefImage.style.opacity = '20%';
                   // if disabled -> bad
-                  } else if (civBreakdown[`${civ}`]['disabled']['units']
-                            && civBreakdown[`${civ}`]['disabled']['units'].includes(name)
+                  } else if (civsConfig[`${civ}`]['disabled']['units']
+                            && civsConfig[`${civ}`]['disabled']['units'].includes(name)
                             ) {
                     xRefImage.style.opacity = '20%';
                   }
                   console.log("I am a unit, and I am in " + civ);
               } else if (type === "UNIQUEUNIT") {
-                console.log(civBreakdown[`${civ}`]['enabled']['unique']);
-                console.log(civBreakdown[`${civ}`]['enabled']['units']);
+                console.log(civsConfig[`${civ}`]['enabled']['unique']);
+                console.log(civsConfig[`${civ}`]['enabled']['units']);
                 // Make sure this unique unit is specifically enabled for this civ
                 // Sometimes "unique" units are also units e.g. genitour
-                if (   (civBreakdown[`${civ}`]['enabled']['unique']
-                    && !civBreakdown[`${civ}`]['enabled']['unique'].includes(name))
+                if (   (civsConfig[`${civ}`]['enabled']['unique']
+                    && !civsConfig[`${civ}`]['enabled']['unique'].includes(name))
 
-                    && (!civBreakdown[`${civ}`]['enabled']['units'] ||
-                    (civBreakdown[`${civ}`]['enabled']['units']
-                    && !civBreakdown[`${civ}`]['enabled']['units'].includes(name)))) {
+                    && (!civsConfig[`${civ}`]['enabled']['units'] ||
+                    (civsConfig[`${civ}`]['enabled']['units']
+                    && !civsConfig[`${civ}`]['enabled']['units'].includes(name)))) {
                   xRefImage.style.opacity = '20%';
                   
                 }
                 console.log("I am a uniqueunit, and I am in " + civ);
               } else if (type === "TECHNOLOGY") {
                 // Make sure this technology isn't disabled for this civ.
-                if (civBreakdown[`${civ}`]['disabled']['techs']
-                    && civBreakdown[`${civ}`]['disabled']['techs'].includes(name)) {
+                if (civsConfig[`${civ}`]['disabled']['techs']
+                    && civsConfig[`${civ}`]['disabled']['techs'].includes(name)) {
                   xRefImage.style.opacity = '20%';
                 }
               }
@@ -354,12 +351,12 @@
                 // Make sure this building isn't disabled for this civ
                 // if not enabled and default is disabled -> bad
                 if (defaultDisabledBuildings.includes(name) && 
-                    (!civBreakdown[`${civ}`]['enabled']['buildings'] ||
-                    !civBreakdown[`${civ}`]['enabled']['buildings'].includes(name))) {
+                    (!civsConfig[`${civ}`]['enabled']['buildings'] ||
+                    !civsConfig[`${civ}`]['enabled']['buildings'].includes(name))) {
                   xRefImage.style.opacity = '20%';
                 // if disabled -> bad
-                } else if (civBreakdown[`${civ}`]['disabled']['buildings']
-                          && civBreakdown[`${civ}`]['disabled']['buildings'].includes(name)
+                } else if (civsConfig[`${civ}`]['disabled']['buildings']
+                          && civsConfig[`${civ}`]['disabled']['buildings'].includes(name)
                           ) {
                   xRefImage.style.opacity = '20%';
                 }

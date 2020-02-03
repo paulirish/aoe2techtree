@@ -351,16 +351,19 @@
                 }
               }
               else if (type === "BUILDING") {
-                // Make sure this building isn't disabled for this civ.
-                if (civBreakdown[`${civ}`]['disabled']['buildings']
-                    && civBreakdown[`${civ}`]['disabled']['buildings'].includes(name)) {
+                // Make sure this building isn't disabled for this civ
+                // if not enabled and default is disabled -> bad
+                if (defaultDisabledBuildings.includes(name) && 
+                    (!civBreakdown[`${civ}`]['enabled']['buildings'] ||
+                    !civBreakdown[`${civ}`]['enabled']['buildings'].includes(name))) {
+                  xRefImage.style.opacity = '20%';
+                // if disabled -> bad
+                } else if (civBreakdown[`${civ}`]['disabled']['buildings']
+                          && civBreakdown[`${civ}`]['disabled']['buildings'].includes(name)
+                          ) {
                   xRefImage.style.opacity = '20%';
                 }
               }
-              // if (civBreakdown[`${civ}`]['enabled']['units']
-              //     && civBreakdown[`${civ}`]['enabled']['units'].includes(name)) {
-              //   console.log("i am in " + civ);
-              // }
             }
           
 

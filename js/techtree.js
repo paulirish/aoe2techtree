@@ -528,14 +528,16 @@ function checkIdUnique(tree) {
 }
 
 let defaultDisabled = [EAGLE_SCOUT, EAGLE_WARRIOR, ELITE_EAGLE_WARRIOR, BATTLE_ELEPHANT,
-  ELITE_BATTLE_ELEPHANT, STEPPE_LANCER, ELITE_STEPPE_LANCER];
+  ELITE_BATTLE_ELEPHANT, STEPPE_LANCER, ELITE_STEPPE_LANCER,];
+
+let defaultDisabledBuildings = [KREPOST, FEITORIA,];
 
 function resetToDefault(tree) {
     SVG.select('.cross').animate(animation_duration).attr({'fill-opacity': 0});
     disableUniqueUnits(tree);
     enable([], [UNIQUE_UNIT, ELITE_UNIQUE_UNIT], []);
     disable([], defaultDisabled, []);
-    disable([KREPOST, FEITORIA], [], []);
+    disable(defaultDisabledBuildings, [], []);
 }
 
 function disable(buildings, units, techs) {

@@ -4,6 +4,9 @@
             height: 100%;
             box-sizing: border-box;
             --xRef-badge-size: 30px;
+            --border-size: 6px;
+            --meta-info-width: 20rem;
+            --meta-info-padding: 1rem;
         }
 
         body {
@@ -61,22 +64,22 @@
         }
 
         #techtree {
-            border: 6px solid #4d3617;
+            border: var(--border-size) solid #4d3617;
             flex: 1 0 auto;
             position: relative;
-            width: calc(100vw - 22rem - 20px);
+            width: calc(100vw - (var(--meta-info-width) + 2 * var(--meta-info-padding) + 2 * var(--border-size)));
             overflow-x: scroll;
         }
 
         #metainfo {
-            border: 6px solid #4d3617;
+            border: var(--border-size) solid #4d3617;
             border-right: none;
-            width: 20rem;
+            width: var(--meta-info-width);
             flex: 0 0 auto;
             display: flex;
             flex-direction: column;
             background-color: #e7c28e;
-            padding: 1rem;
+            padding: var(--meta-info-padding);
         }
 
         #civinfo {

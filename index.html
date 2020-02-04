@@ -55,6 +55,19 @@
     </div>
     <div id="wrapper">
         <div id="metainfo">
+            <div style="
+            position: absolute;
+            left: calc(var(--meta-info-width) + 2 * var(--meta-info-padding) + var(--border-size));
+            z-index: 2;
+            background-color: #e7c28e;
+            padding: 5px;
+            border: 2px solid #4d3616;
+            border-left: none;
+        "><button id="minimize_meta" style="background-color: transparent;
+    border: none;
+    padding: 2px;">&lt;</button>
+          
+            </div>
             <div id="civinfo">
                 <div id="civtitle">
                     <h2 id="civname">Loading…</h2>
@@ -89,6 +102,17 @@
     var data = {};
     let connections = getConnections();
     let connectionpoints = getConnectionPoints(tree);
+
+    // setup the minimize button
+    let minimizeMetaButton = document.getElementById('minimize_meta');
+    minimizeMetaButton.addEventListener('click', toggleMinimuzeMeta);
+
+    function toggleMinimuzeMeta() {
+      document.getElementById('metainfo').style.width = "0px"
+      document.getElementById('civinfo').style.display = "none"
+      document.getElementById('thanks').style.display = "none"
+    }
+
 
     loadJson(function (response) {
         data = JSON.parse(response);

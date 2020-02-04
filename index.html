@@ -227,11 +227,21 @@
         }
         helptext.style.top = top + "px";
 
-        helptext.style.left = Math.max(0, (caret.x - helptext.offsetWidth)) + "px";
+        // let helpbox = helptext.getBoundingClientRect();
+
+        let destX = caret.x - helptext.offsetWidth;
+
+        // helptext.style.left = Math.max(0, (caret.x - helptext.offsetWidth)) + "px";
         let helpbox = helptext.getBoundingClientRect();
-        if (helpbox.left < 0) {
-            helptext.style.left = Math.max(0, (caret.x - helptext.offsetWidth)) - helpbox.left + "px";
+        // check the scroll left
+        let tt = document.getElementById('techtree');
+        if (destX <= 0 || destX - tt.scrollLeft <= 0) {
+            
+            destX = caret.x + caret.width;
         }
+        helptext.style.left = destX + 'px';
+        console.log(caret.width)
+        console.log(caret.x, caret.y, caret.width, helptext.style.width, helptext.offsetHeight, helptext.style.left, helptext.style.top)
     }
 
     function hideHelp() {

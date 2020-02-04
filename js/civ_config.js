@@ -1,3 +1,17 @@
+function civ(name, tree) {
+  resetToDefault(tree);
+
+  let selectedCiv = civsConfig[name];
+
+  let enabled = selectedCiv.enabled;
+  let disabled = selectedCiv.disabled;
+  if (selectedCiv.disableHorses) disableHorses(tree);
+
+  enable(enabled.buildings || [], enabled.units || [], enabled.techs || []);
+  disable(disabled.buildings || [], disabled.units || [], disabled.techs || []);
+  unique(enabled.unique || [], selectedCiv.monkPrefix);
+}
+
 const civsConfig = {
   Aztecs: {
       disableHorses: true,

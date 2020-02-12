@@ -83,7 +83,6 @@
 </div>
 <script src="js/svg.min.js"></script>
 <script src="js/techtree.js"></script>
-<script src="js/civ_config.js"></script>
 <script src="js/civs.js"></script>
 <script type="text/javascript">
     var tree = getDefaultTree();
@@ -195,7 +194,6 @@
         var xobj = new XMLHttpRequest();
         xobj.overrideMimeType("application/json");
         xobj.open('GET', 'data/data.json', true);
-        // xobj.open('GET', 'data/civs_breakdown.json', true);
         xobj.onreadystatechange = function () {
             if (xobj.readyState === 4 && xobj.status === 200) {
                 // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
@@ -436,42 +434,6 @@
         } else {
             return "";
         }
-    }
-
-    /**
-     * Create the Cross-Reference badges. This is done at load time in order to avoid re-making the
-     * badges at runtime per-click on a new unit.
-     * 
-     * @return A container with buttons + images for each civ to be used in cross referencing.
-     */
-    function createXRefBadges() {
-        let xRefLinks = document.createElement('div');
-        xRefLinks.style.maxWidth = "calc(30px * 7)";
-        xRefLinks.style.margin = "auto";
-        xRefLinks.style.paddingTop = "0.2rem";
-        for (let civ of Object.keys(data.civs)) {
-            let xRefLink = document.createElement('button');
-            xRefLink.addEventListener('click', function() {
-
-              document.getElementById('civselect').value=civ;
-              loadCiv();
-            });
-            xRefLink.style.backgroundColor = "transparent";
-            xRefLink.style.border = "none";
-            xRefLink.style.padding = 0;
-
-            // Add a badge for this civ if this element isn't disabled, or if it is a unique unit and not enabled.
-            let xRefImage = document.createElement('img');
-
-            xRefImage.src = `./img/Civs/${civ.toLowerCase()}.png`;
-            // xRefImage.style.width = "30px";
-            // xRefImage.style.height = "30px";
-            xRefImage.title = `${civ}`;
-            xRefImage.id = `xRef__badge__${civ}`;
-            xRefLink.appendChild(xRefImage);
-            xRefLinks.appendChild(xRefLink);
-        }
-        return xRefLinks;
     }
 
     /** 

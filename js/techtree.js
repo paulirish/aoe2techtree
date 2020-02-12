@@ -337,8 +337,6 @@ const ELITE_BERSERK = "Elite Berserk";
 const CHIEFTAINS = "Chieftains";
 const BERSERKERGANG = "Berserkergang";
 
-<<<<<<< HEAD
-=======
 const horseDisabled = [STABLE, 
     SCOUT_CAVALRY, LIGHT_CAVALRY, HUSSAR,
     BLOODLINES, KNIGHT, CAVALIER, PALADIN,
@@ -351,7 +349,6 @@ const defaultDisabled = [EAGLE_SCOUT, EAGLE_WARRIOR, ELITE_EAGLE_WARRIOR, BATTLE
     
 const defaultDisabledBuildings = [KREPOST, FEITORIA,];
 
->>>>>>> cross-reference
 class Tree {
     constructor() {
         this.offsets = {

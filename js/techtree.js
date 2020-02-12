@@ -337,6 +337,21 @@ const ELITE_BERSERK = "Elite Berserk";
 const CHIEFTAINS = "Chieftains";
 const BERSERKERGANG = "Berserkergang";
 
+<<<<<<< HEAD
+=======
+const horseDisabled = [STABLE, 
+    SCOUT_CAVALRY, LIGHT_CAVALRY, HUSSAR,
+    BLOODLINES, KNIGHT, CAVALIER, PALADIN,
+    CAMEL_RIDER, HEAVY_CAMEL_RIDER, HUSBANDRY,
+    CAVALRY_ARCHER, HEAVY_CAV_ARCHER, SCALE_BARDING_ARMOR,
+    CHAIN_BARDING_ARMOR, PLATE_BARDING_ARMOR, PARTHIAN_TACTICS];
+
+const defaultDisabled = [EAGLE_SCOUT, EAGLE_WARRIOR, ELITE_EAGLE_WARRIOR, BATTLE_ELEPHANT,
+    ELITE_BATTLE_ELEPHANT, STEPPE_LANCER, ELITE_STEPPE_LANCER,];
+    
+const defaultDisabledBuildings = [KREPOST, FEITORIA,];
+
+>>>>>>> cross-reference
 class Tree {
     constructor() {
         this.offsets = {

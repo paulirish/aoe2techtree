@@ -5,7 +5,7 @@
             box-sizing: border-box;
             --xRef-badge-size: 30px;
         }
-
+ 
         body {
             margin: 0;
             display: flex;
@@ -167,3 +167,20 @@
             stroke: #fff;
             stroke-width: 3px;
         }
+
+
+        #helptext__content dl {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            max-width: 300px;
+            margin: 1em;
+            line-height: 1.4;
+          }
+          #helptext__content dt {
+            grid-column: 1;
+            font-weight: bold;
+          }
+          #helptext__content dd {
+             grid-column: 2;
+           }
+

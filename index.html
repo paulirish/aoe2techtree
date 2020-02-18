@@ -235,6 +235,18 @@
         }
     }
 
+    function displayHelpStats(stats) {
+        const dl = document.createElement('dl');
+        for (const stat of stats) {
+            if (!stat) continue;
+            const dt = dl.appendChild(document.createElement('dt'));
+            const dd = dl.appendChild(document.createElement('dd'));
+            dt.textContent = stat[0];
+            dd.textContent = stat[1];
+        }
+        return dl;
+    }
+
     function displayHelp(caretId) {
         focusedNodeId = caretId;
         let helptext = document.getElementById("helptext");
@@ -245,8 +257,9 @@
         let id = overlay.data('id');
         let caret = overlay.data('caret');
         let type = overlay.data('type');
-        let content = getHelpText(name, id, type);
-        helptextContent.innerHTML = content;
+        let {text, stats} = getHelpText(name, id, type);
+        helptextContent.innerHTML = text;
+        helptextContent.appendChild(displayHelpStats(stats));
 
         styleXRefBadges(name, type);
 
@@ -286,33 +299,38 @@
             return "?";
         }
         let meta = data.meta[entitytype][name];
+        const stats = [];
         if (meta !== undefined) {
             text = text.replace(/‹cost›/, "Cost: " + cost(meta.Cost));
-            text = text.replace(/‹hp›/, "HP:&nbsp;" + meta.HP + ",");
-            text = text.replace(/‹attack›/, "Attack:&nbsp;" + meta.Attack + ",");
-            text = text.replace(/‹(A|a)rmor›/, "Armor:&nbsp;" + meta.MeleeArmor + ",");
-            text = text.replace(/‹(P|p)iercearmor›/, "Piercearmor:&nbsp;" + meta.PierceArmor + ",");
-            text = text.replace(/‹garrison›/, "Garrison:&nbsp;" + meta.GarrisonCapacity + ",");
-            text = text.replace(/‹range›/, "Range:&nbsp;" + meta.Range + ",");
-            text += minRangeIfDefined(meta.MinRange, "Min Range:&nbsp;");
-            text += ifDefined(meta.LineOfSight, "Line of Sight:&nbsp;");
-            text += ifDefined(meta.Speed, "Speed:&nbsp;");
-            text += secondsIfDefined(meta.TrainTime, "Build Time:&nbsp;");
-            text += secondsIfDefined(meta.ResearchTime, "Research Time:&nbsp;");
-            text += ifDefined(meta.FrameDelay, "Frame Delay:&nbsp;");
-            text += secondsIfDefined(meta.ReloadTime, "Reload Time:&nbsp;");
-            text += accuracyIfDefined(meta.AccuracyPercent, "Accuracy:&nbsp;");
+            text = text.replace(/‹hp›/, _ => stats.push(["HP:", meta.HP]) && '');
+            text = text.replace(/‹attack›/, _ => stats.push(["Attack:", meta.Attack]) && '');
+            text = text.replace(/‹(A|a)rmor›/, _ => stats.push(["Armor:", meta.MeleeArmor]) && '');
+            text = text.replace(/‹(P|p)iercearmor›/, _ => stats.push(["Piercearmor:", meta.PierceArmor]) && '');
+            text = text.replace(/‹garrison›/, _ => stats.push(["Garrison:", meta.GarrisonCapacity]) && '');
+            text = text.replace(/‹range›/, _ => stats.push(["Range:", meta.Range]) && '');
+
+            stats.push( minRangeIfDefined(meta.MinRange, "Min Range:"));
+            stats.push( ifDefined(meta.LineOfSight, "Line of Sight:"));
+            stats.push( ifDefined(meta.Speed, "Speed:"));
+            stats.push( secondsIfDefined(meta.TrainTime, "Build Time:"));
+            stats.push( secondsIfDefined(meta.ResearchTime, "Research Time:"));
+            stats.push( ifDefined(meta.FrameDelay, "Frame Delay:"));
+            stats.push( secondsIfDefined(meta.ReloadTime, "Reload Time:"));
+            stats.push( accuracyIfDefined(meta.AccuracyPercent, "Accuracy:"));
         } else {
             console.log("No metadata found for " + name);
         }
-        return text.substring(0, text.length - 1);
 
+        return {
+            text: text.substring(0, text.length - 1),
+            stats: stats,
+        }
     }
 
     /**
      * Create the Cross-Reference badges. This is done at load time in order to avoid re-making the
      * badges at runtime per-click on a new unit.
-     * 
+     *
      * @return A container with buttons + images for each civ to be used in cross referencing.
      */
      function createXRefBadges() {
@@ -338,10 +356,10 @@
         return xRefLinks;
     }
 
-    /** 
+    /**
      * Set on/off of all cross reference badges for a single unit.
-     * 
-     * @param {string} name The name of the entity being cross-referenced. 
+     *
+     * @param {string} name The name of the entity being cross-referenced.
      * @param {string} type The type of the entity being cross-referenced.
      */
     function styleXRefBadges(name, type) {
@@ -364,7 +382,7 @@
                 }
                 if (type === "UNIT") {
                     // There are 2 ways for a UNIT to be disabled.
-                    //      1. The unit is disabled by default, and not 
+                    //      1. The unit is disabled by default, and not
                     //         specifically enabled in the config.
                     //      2. The unit is disabled in the specific config.
                     if (defaultDisabledUnits.includes(name) &&
@@ -386,7 +404,7 @@
                          !unique.includes(name)) &&
                         (!enabled || !enabled['units'] ||
                          !enabled['units'].includes(name))) {
-                        found = false;    
+                        found = false;
                     }
                 } else if (type === "TECHNOLOGY") {
                     // Technology is only ever disabled. See js/techtree.js#resetToDefault
@@ -397,7 +415,7 @@
                 }
                 else if (type === "BUILDING") {
                     // There are 2 ways for a BUILDING to be disabled.
-                    //      1. The building is disabled by default, and not 
+                    //      1. The building is disabled by default, and not
                     //         specifically enabled in the config.
                     //      2. The building is disabled in the specific config.
                     if (defaultDisabledBuildings.includes(name) &&
@@ -422,33 +440,25 @@
 
     function ifDefined(value, prefix) {
         if (value !== undefined) {
-            return " " + prefix + value + ",";
-        } else {
-            return "";
+            return [prefix, value];
         }
     }
 
     function secondsIfDefined(value, prefix) {
         if (value !== undefined) {
-            return " " + prefix + value + "s,";
-        } else {
-            return "";
+            return [prefix, value];
         }
     }
 
     function accuracyIfDefined(value, prefix) {
         if (value !== undefined && value < 100) {
-            return " " + prefix + value + "%,";
-        } else {
-            return "";
+            return [prefix, value];
         }
     }
 
     function minRangeIfDefined(value, prefix) {
         if (value !== undefined && value > 0) {
-            return " " + prefix + value + ",";
-        } else {
-            return "";
+            return [prefix, value];
         }
     }
 

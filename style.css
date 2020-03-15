@@ -1,169 +1,169 @@
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-            --xRef-badge-size: 30px;
-        }
+html,
+body {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    --xRef-badge-size: 30px;
+}
 
-        body {
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-        #info,
-        #info a {
-            display: inline;
-            font-family: monospace;
-            color: gray;
-        }
+#info,
+#info a {
+    display: inline;
+    font-family: monospace;
+    color: gray;
+}
 
-        #container {
-            min-width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+#container {
+    min-width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 
-        #navigation {
-            padding-left: 1rem;
-        }
+#navigation {
+    padding-left: 1rem;
+}
 
-        #helptext {
-            position: absolute;
-            display: none;
-            max-width: 300px;
-            background-color: #eee;
-            border: 2px solid #bbb;
-            padding: 0.2rem;
-            font-size: 10pt;
-        }
+#helptext {
+    position: absolute;
+    display: none;
+    max-width: 300px;
+    background-color: #eee;
+    border: 2px solid #bbb;
+    padding: 0.2rem;
+    font-size: 10pt;
+}
 
-        #helptext__x_ref__container {
-            /* There are 35 civs, 5x7 makes the badges into a nice square. */
-            max-width: calc(var(--xRef-badge-size) * 7);
-            margin: auto;
-            padding-top: 0.2rem;
-        }
+#helptext__x_ref__container {
+    /* There are 35 civs, 5x7 makes the badges into a nice square. */
+    max-width: calc(var(--xRef-badge-size) * 7);
+    margin: auto;
+    padding-top: 0.2rem;
+}
 
-        /* Style for helptext Cross-Reference buttons */
-        #helptext #helptext__x_ref div button {
-            background-color: transparent;
-            border: none;
-            padding: 0;
-        }
+/* Style for helptext Cross-Reference buttons */
+#helptext #helptext__x_ref div button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
 
-        /* Style for helptext Cross-Reference image badges */
-        #helptext #helptext__x_ref div button img {
-            width: var(--xRef-badge-size);
-            height: var(--xRef-badge-size);
-        }
+/* Style for helptext Cross-Reference image badges */
+#helptext #helptext__x_ref div button img {
+    width: var(--xRef-badge-size);
+    height: var(--xRef-badge-size);
+}
 
-        #wrapper {
-            min-width: 100%;
-            flex: 1 1 auto;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            -ms-overflow-style: -ms-autohiding-scrollbar;
-            background-color: #e7c28e;
-        }
+#wrapper {
+    min-width: 100%;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    background-color: #e7c28e;
+}
 
-        #techtree {
-            border: 5px solid #4d3617;
-            flex: 1 0 auto;
-            position: relative;
-        }
+#techtree {
+    border: 5px solid #4d3617;
+    flex: 1 0 auto;
+    position: relative;
+}
 
-        #metainfo {
-            border: 5px solid #4d3617;
-            width: 20rem;
-            flex: 0 0 auto;
-            display: flex;
-            flex-direction: column;
-            background-color: #e7c28e;
-            padding: 1rem;
-        }
+#metainfo {
+    border: 5px solid #4d3617;
+    width: 20rem;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    background-color: #e7c28e;
+    padding: 1rem;
+}
 
-        #civinfo {
-            flex: 1 0 auto;
-            font-size: 11pt;
-        }
+#civinfo {
+    flex: 1 0 auto;
+    font-size: 11pt;
+}
 
-        #civtitle {
-            height: 52px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+#civtitle {
+    height: 52px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        #thanks {
-            flex: 0 0 auto;
-        }
+#thanks {
+    flex: 0 0 auto;
+}
 
-        #civname {
-            text-align: center;
-            flex: 1 0 auto;
-            margin: 0;
-        }
+#civname {
+    text-align: center;
+    flex: 1 0 auto;
+    margin: 0;
+}
 
-        hr {
-            overflow: visible;
-            /* For IE */
-            height: 30px;
-            border-style: solid;
-            border-color: black;
-            border-width: 1px 0 0 0;
-            border-radius: 20px;
-        }
+hr {
+    overflow: visible;
+    /* For IE */
+    height: 30px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px 0 0 0;
+    border-radius: 20px;
+}
 
-        hr:before {
-            /* Not really supposed to work, but does */
-            display: block;
-            content: "";
-            height: 30px;
-            margin-top: -31px;
-            border-style: solid;
-            border-color: black;
-            border-width: 0 0 1px 0;
-            border-radius: 20px;
-        }
+hr:before {
+    /* Not really supposed to work, but does */
+    display: block;
+    content: "";
+    height: 30px;
+    margin-top: -31px;
+    border-style: solid;
+    border-color: black;
+    border-width: 0 0 1px 0;
+    border-radius: 20px;
+}
 
-        #navigation {
-            margin-top: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
+#navigation {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
 
-        #thanks,
-        #thanks a {
-            font-size: 6pt;
-            font-family: monospace;
-            color: gray;
-        }
+#thanks,
+#thanks a {
+    font-size: 6pt;
+    font-family: monospace;
+    color: gray;
+}
 
-        .node__overlay {
-            fill: transparent;
-            cursor: pointer;
-        }
-        .node.is-highlight .node__overlay {
-            stroke: #fff;
-            stroke-width: 3px;
-        }
+.node__overlay {
+    fill: transparent;
+    cursor: pointer;
+}
+.node.is-highlight .node__overlay {
+    stroke: #fff;
+    stroke-width: 3px;
+}
 
-        .xRef__badge {
-            cursor: pointer;
-        }
+.xRef__badge {
+    cursor: pointer;
+}
 
-        .connection {
-            fill: none;
-            stroke: #000;
-            stroke-width: 2px;
-        }
-        .connection.is-highlight {
-            stroke: #fff;
-            stroke-width: 3px;
-        }
+.connection {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2px;
+}
+.connection.is-highlight {
+    stroke: #fff;
+    stroke-width: 3px;
+}

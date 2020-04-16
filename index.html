@@ -446,13 +446,13 @@
 
     function secondsIfDefined(value, prefix) {
         if (value !== undefined) {
-            return [prefix, value];
+            return [prefix, `${value}\xa0s`];
         }
     }
 
     function accuracyIfDefined(value, prefix) {
         if (value !== undefined && value < 100) {
-            return [prefix, value];
+            return [prefix, `${value}%`];
         }
     }
 

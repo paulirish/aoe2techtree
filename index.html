@@ -129,6 +129,7 @@
         35: "Mamelukes",
         36: "Heroes and Kings",
     };
+    const baseUnitClasses = [2, 3];
 
     loadJson(function (response) {
 
@@ -286,7 +287,7 @@
         let id = overlay.data('id').replace('_copy', '');
         let caret = overlay.data('caret');
         let type = overlay.data('type');
-        helptextContent.innerHTML = getHelpText(name, id, type);
+        setHelpText(name, id, type, helptextContent);
         styleXRefBadges(name, id, type);
         positionHelptext(caret);
         resetHighlightPath();
@@ -353,7 +354,15 @@
         helptext.style.left = destX + 'px';
     }
 
-    function getHelpText(name, id, type) {
+    const helpTextPrefixes = [
+        'Create',
+        'Build',
+        'Research',
+        'Upgrade to',
+        'Advance to',
+    ];
+
+    function setHelpText(name, id, type, helptextElem) {
         let entitytype = 'buildings';
         if (type === "UNIT" || type === "UNIQUEUNIT") {
             entitytype = 'units';
@@ -368,35 +377,80 @@
             return "?";
         }
         let meta = data.data[entitytype][id];
-        if (meta !== undefined) {
-            text = text.replace(/‹cost›/, "Cost: " + cost(meta.Cost));
-            text = text.replace(/‹hp›/, "HP:&nbsp;" + meta.HP + ",");
-            text = text.replace(/‹attack›/, "Attack:&nbsp;" + meta.Attack + ",");
-            text = text.replace(/‹(A|a)rmor›/, "Armor:&nbsp;" + meta.MeleeArmor + ",");
-            text = text.replace(/‹(P|p)iercearmor›/, "Piercearmor:&nbsp;" + meta.PierceArmor + ",");
-            text = text.replace(/‹garrison›/, "Garrison:&nbsp;" + meta.GarrisonCapacity + ",");
-            text = text.replace(/‹range›/, "Range:&nbsp;" + meta.Range + ",");
-            text += minRangeIfDefined(meta.MinRange, "Min Range:&nbsp;");
-            text += ifDefined(meta.LineOfSight, "Line of Sight:&nbsp;");
-            text += ifDefined(meta.Speed, "Speed:&nbsp;");
-            text += secondsIfDefined(meta.TrainTime, "Build Time:&nbsp;");
-            text += secondsIfDefined(meta.ResearchTime, "Research Time:&nbsp;");
-            text += ifDefined(meta.FrameDelay, "Frame Delay:&nbsp;");
-            text += secondsIfDefined(meta.ReloadTime, "Reload Time:&nbsp;");
-            text += accuracyIfDefined(meta.AccuracyPercent, "Accuracy:&nbsp;");
-            text += arrayIfDefinedAndNonEmpty(meta.Attacks, "<br>Attacks:&nbsp;");
-            text += arrayIfDefinedAndNonEmpty(meta.Armours, "<br>Armours:&nbsp;");
-        } else {
-            console.log("No metadata found for " + name);
-        }
-        return text.substring(0, text.length - 1);
+        let stats = '';
 
+        // Remove "Create", etc prefixes
+        helpTextPrefixes.forEach(prefix => {
+            if (text.startsWith(prefix)) {
+                text = text.replace(prefix, '');
+            }
+        });
+
+        function statBlock(key, text, {unitSuffix = '', icon = false} = {}) {
+            if (meta[key] === undefined) return '';
+
+            // todo replace with icon
+            return `
+                <div class="statitem">
+                    <span class="icon icon__${key}" title="${text}">${text}: </span>
+                    ${meta[key]}\xa0${unitSuffix}
+                </div>`;
+        }
+
+        if (meta === undefined) {
+            console.log("No metadata found for " + name);
+            return;
+        }
+
+        // Just nice to doublecheck things...
+        meta.MeleeArmor && type != 'BUILDING' && console.assert(meta.MeleeArmor == meta.Armours.find(ar => ar.Class === 4).Amount);
+        meta.PierceArmor && type != 'BUILDING' &&  console.assert(meta.PierceArmor == meta.Armours.find(ar => ar.Class === 3).Amount);
+
+        text = text.replace(/‹cost›/, "Cost: " + cost(meta.Cost));
+        // remove all additional ‹blocks›
+        text = text.replace(/\s?‹.*?›/g, '')
+
+        helptextElem.innerHTML = text.trim();
+
+        stats += `<div class="statitems statitems__primary">`;
+        stats += statBlock('HP', 'HP', {icon: true});
+        stats += statBlock('Attack', 'Attack', {icon: true});
+        stats += statBlock('Armour', 'Armour', {icon: true}); // todo, capture multiple armors in here as its so rare (only turtleships & rams)
+        stats += statBlock('PierceArmour', 'Pierce armour', {icon: true});
+        stats += statBlock('Range', 'Range', {icon: true});
+        stats += statBlock('GarrisonCapacity', 'Garrison', {icon: true});
+        stats += `</div>`;
+
+        stats += `<div class="statitems statitems__secondary">`;
+        if (meta.AccuracyPercent && meta.AccuracyPercent < 100) {
+            stats += statBlock('AccuracyPercent', 'Accuracy', {unitSuffix: '%'});
+        }
+        stats += statBlock('LineOfSight', "Line of Sight");
+        stats += statBlock('FrameDelay', "Frame Delay");
+        stats += statBlock('ReloadTime', "Reload Time", {unitSuffix: 's'});
+        stats += statBlock('Speed', "Speed");
+        stats += statBlock('TrainTime', "Build Time", {unitSuffix: 's'});
+        stats += statBlock('ResearchTime', "Research Time", {unitSuffix: 's'});
+        // TODO incorporate into range
+        if (meta.MinRange && meta.MinRange > 0) {
+            stats += statBlock('MinRange', 'Min Range');
+        }
+        stats += `</div>`;
+
+
+        stats += attackAndArmorBonuses(meta.Attacks, "Attack Bonuses:&nbsp;", meta, stats);
+        stats += attackAndArmorBonuses(meta.Armours, "Armour:&nbsp;", meta, text);
+
+        const statsElem = document.createElement('div');
+        statsElem.classList.add('stats');
+        statsElem.innerHTML = stats;
+        helptextElem.insertBefore(statsElem, helptextElem.querySelector('i'));
     }
 
     /**
      * Create the Cross-Reference badges. This is done at load time in order to avoid re-making the
      * badges at runtime per-click on a new unit.
-     * 
+     *
      * @return A container with buttons + images for each civ to be used in cross referencing.
      */
      function createXRefBadges() {
@@ -422,10 +476,10 @@
         return xRefLinks;
     }
 
-    /** 
+    /**
      * Set on/off of all cross reference badges for a single unit.
-     * 
-     * @param {string} name The name of the entity being cross-referenced. 
+     *
+     * @param {string} name The name of the entity being cross-referenced.
      * @param {string} id The id of the entity being cross-referenced.
      * @param {string} type The type of the entity being cross-referenced.
      */
@@ -451,7 +505,7 @@
                 }
                 if (type === "UNIT") {
                     // There are 2 ways for a UNIT to be disabled.
-                    //      1. The unit is disabled by default, and not 
+                    //      1. The unit is disabled by default, and not
                     //         specifically enabled in the config.
                     //      2. The unit is disabled in the specific config.
                     if (defaultDisabledUnits.map((id)=>`unit_${id}`).includes(id) &&
@@ -473,7 +527,7 @@
                          !('unit_'+unique[0] === id || 'unit_'+unique[1] === id)) &&
                         (!enabled || !enabled['units'] ||
                          !enabled['units'].map((id)=>`unit_${id}`).includes(id))) {
-                        found = false;    
+                        found = false;
                     }
                 } else if (type === "TECHNOLOGY") {
                     // Technology is only ever disabled. See js/techtree.js#resetToDefault
@@ -484,7 +538,7 @@
                 }
                 else if (type === "BUILDING") {
                     // There are 2 ways for a BUILDING to be disabled.
-                    //      1. The building is disabled by default, and not 
+                    //      1. The building is disabled by default, and not
                     //         specifically enabled in the config.
                     //      2. The building is disabled in the specific config.
                     if (defaultDisabledBuildings.includes(id) &&
@@ -539,18 +593,25 @@
         }
     }
 
-    function arrayIfDefinedAndNonEmpty(attacks, prefix) {
-        if (attacks === undefined || attacks.length < 1) {
-            return "";
-        } else {
-            const strings = [];
-            for (let attack of attacks) {
-                const amount = attack['Amount'];
-                const clazz = unitClasses[attack['Class']];
-                strings.push(`${amount} (${clazz})`);
-            }
-            return " " + prefix + strings.join(', ') + ",";
-        }
+    function baseAttackAndArmor(attacks, prefix) {
+        if (!attacks) return '';
+        return prefix + attacks.filter(att => baseUnitClasses.includes(att.Class)).map(att => {
+            const clazz = unitClasses[att['Class']];
+            return `${att.Amount} ${clazz.replace('Base ', '').toLowerCase()}`;
+        }).join(', ');
+    }
+
+    var numberFormatter = new Intl.NumberFormat(undefined, {signDisplay: 'always'});
+
+    function attackAndArmorBonuses(attacks, prefix, base, txt) {
+        // TODO: handle organ gun secondary attack edgecase: https://discordapp.com/channels/500331004884680704/500335884395085834/687605966560296960
+        attacks = attacks.filter(att => !baseUnitClasses.includes(att.Class) && att.Amount != 0);
+        if (!attacks || attacks.length < 1) return '';
+
+        return prefix + attacks.map(att => {
+            const clazz = unitClasses[att['Class']];
+            return `${numberFormatter.format(att.Amount)} vs ${clazz}`;
+        }).join(', ');
     }
 
 
@@ -570,7 +631,6 @@
         }
         return value;
     }
-
 
 </script>
 </body>

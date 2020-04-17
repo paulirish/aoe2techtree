@@ -69,6 +69,25 @@ body {
     height: var(--xRef-badge-size);
 }
 
+#helptext b {
+    font-size: 18px;
+}
+
+.statitems {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px 0;
+}
+
+.statitem {
+    width: 50%;
+}
+
+#helptext i {
+    display:block;
+    margin: 10px 0 5px;
+}
+
 #wrapper {
     min-width: 100%;
     flex: 1 1 auto;

@@ -129,7 +129,7 @@
         35: "Mamelukes",
         36: "Heroes and Kings",
     };
-    const baseUnitClasses = [2, 3];
+    const baseUnitClasses = [3, 4];
 
     loadJson(function (response) {
 
@@ -386,13 +386,28 @@
             }
         });
 
+        function iconFilename(key) {
+            key = key.toLowerCase();
+            const lookup = {
+                'attack' : 'damage',
+                'meleearmor' : 'armor',
+                'piercearmor' : 'range-armor',
+                'garrisoncapacity' : 'garrison',
+                // '' : 'convert',
+                // '' : 'transport',
+            };
+            if (lookup[key]) return lookup[key];
+            return key;
+        }
+
         function statBlock(key, text, {unitSuffix = '', icon = false} = {}) {
             if (meta[key] === undefined) return '';
 
-            // todo replace with icon
             return `
                 <div class="statitem">
-                    <span class="icon icon__${key}" title="${text}">${text}: </span>
+                    <span class="${icon ? 'icon' : ''} icon__${iconFilename(key)}" title="${text}">
+                        ${text}:
+                    </span>
                     ${meta[key]}\xa0${unitSuffix}
                 </div>`;
         }
@@ -409,16 +424,21 @@
         text = text.replace(/‹cost›/, "Cost: " + cost(meta.Cost));
         // remove all additional ‹blocks›
         text = text.replace(/\s?‹.*?›/g, '')
-
+        // Remove BR following upgrades. TODO, do this better in data pipeline
+        text = text.replace('</i> <br>', '</i>');
         helptextElem.innerHTML = text.trim();
 
         stats += `<div class="statitems statitems__primary">`;
         stats += statBlock('HP', 'HP', {icon: true});
         stats += statBlock('Attack', 'Attack', {icon: true});
-        stats += statBlock('Armour', 'Armour', {icon: true}); // todo, capture multiple armors in here as its so rare (only turtleships & rams)
-        stats += statBlock('PierceArmour', 'Pierce armour', {icon: true});
-        stats += statBlock('Range', 'Range', {icon: true});
-        stats += statBlock('GarrisonCapacity', 'Garrison', {icon: true});
+        stats += statBlock('MeleeArmor', 'Armor', {icon: true}); // todo, capture multiple armors in here as its so rare (only turtleships & rams)
+        stats += statBlock('PierceArmor', 'Pierce armor', {icon: true});
+        if (meta.Range && meta.Range > 0) {
+            stats += statBlock('Range', 'Range', {icon: true});
+        }
+        if (meta.GarrisonCapacity && meta.GarrisonCapacity > 0) {
+            stats += statBlock('GarrisonCapacity', 'Garrison', {icon: true});
+        }
         stats += `</div>`;
 
         stats += `<div class="statitems statitems__secondary">`;
@@ -604,14 +624,18 @@
     var numberFormatter = new Intl.NumberFormat(undefined, {signDisplay: 'always'});
 
     function attackAndArmorBonuses(attacks, prefix, base, txt) {
-        // TODO: handle organ gun secondary attack edgecase: https://discordapp.com/channels/500331004884680704/500335884395085834/687605966560296960
-        attacks = attacks.filter(att => !baseUnitClasses.includes(att.Class) && att.Amount != 0);
+        attacks = attacks
+            // TODO: handle organ gun secondary attack edgecase: https://discordapp.com/channels/500331004884680704/500335884395085834/687605966560296960
+            .filter(att => !baseUnitClasses.includes(att.Class))
+            .filter(att => att.Amount != 0);
         if (!attacks || attacks.length < 1) return '';
 
-        return prefix + attacks.map(att => {
-            const clazz = unitClasses[att['Class']];
-            return `${numberFormatter.format(att.Amount)} vs ${clazz}`;
-        }).join(', ');
+        return prefix + attacks
+            .sort((a, b) => b.Amount - a.Amount)
+            .map(att => {
+                const clazz = unitClasses[att['Class']];
+                return `${numberFormatter.format(att.Amount)} vs ${clazz}`;
+            }).join(', ');
     }
 
 

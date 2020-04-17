@@ -45,13 +45,13 @@ body {
     width: 300px;
     background-color: #eee;
     border: 2px solid #bbb;
-    padding: 0.2rem;
+    padding: 0.4rem;
     font-size: 10pt;
 }
 
 #helptext__x_ref__container {
     /* There are 35 civs, 5x7 makes the badges into a nice square. */
-    max-width: calc(var(--xRef-badge-size) * 7);
+    max-width: calc(var(--xRef-badge-size) * 9);
     margin: auto;
     padding-top: 0.2rem;
 }
@@ -78,10 +78,35 @@ body {
     flex-wrap: wrap;
     margin: 10px 0;
 }
+.statitems__primary {
+    font-size: 110%;
+}
 
 .statitem {
     width: 50%;
 }
+
+.statitem .icon {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    text-indent: -99em;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.icon.icon__armor { background-image: url(./img/Resources/armor.png) }
+.icon.icon__convert { background-image: url(./img/Resources/convert.png) }
+.icon.icon__damage { background-image: url(./img/Resources/damage.png) }
+.icon.icon__food { background-image: url(./img/Resources/food.png) }
+.icon.icon__garrison { background-image: url(./img/Resources/garrison.png) }
+.icon.icon__gold { background-image: url(./img/Resources/gold.png) }
+.icon.icon__hp { background-image: url(./img/Resources/hp.png) }
+.icon.icon__range-armor { background-image: url(./img/Resources/range-armor.png) }
+.icon.icon__range { background-image: url(./img/Resources/range.png) }
+.icon.icon__stone { background-image: url(./img/Resources/stone.png) }
+.icon.icon__transport { background-image: url(./img/Resources/transport.png) }
+.icon.icon__wood { background-image: url(./img/Resources/wood.png) }
 
 #helptext i {
     display:block;

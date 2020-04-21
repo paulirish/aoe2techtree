@@ -431,6 +431,7 @@
         stats += `<div class="statitems statitems__primary">`;
         stats += statBlock('HP', 'HP', {icon: true});
         stats += statBlock('Attack', 'Attack', {icon: true});
+        // TODO: MeleeArmor is wrong for rams. gotta use the .Armors array instead.
         stats += statBlock('MeleeArmor', 'Armor', {icon: true}); // todo, capture multiple armors in here as its so rare (only turtleships & rams)
         stats += statBlock('PierceArmor', 'Pierce armor', {icon: true});
         if (meta.Range && meta.Range > 0) {

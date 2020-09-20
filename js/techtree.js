@@ -379,7 +379,7 @@ class Tree {
 
     updateOffsets() {
         const treeRowMaxHeight = this.height / 4 / 2; // 4 ages, two rows per age
-        this.element_height = treeRowMaxHeight * 0.8; // Configurable
+        this.element_height = treeRowMaxHeight * 0.75; // Configurable
         let element_offset = (this.height - (this.padding * 2) - (this.element_height * 8)) / 7;
 
         this.offsets.dark_1 = this.padding;

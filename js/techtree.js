@@ -369,17 +369,18 @@ class Tree {
             imperial_1_y: 0,
             imperial_2_y: 0
         };
-        this.height = Math.max(window.innerHeight - 80, 100);
+        this.height = Math.max(window.innerHeight, 100);
         this.width = 0;
         this.padding = 20;
         this.element_height = 0;
         this.lanes = [];
-        this.offset_x = 150;  // 150 is starting offset from the left to accommodate age icons
+        this.offset_x = 108;  // 108 is starting offset from the left to accommodate age icons
     }
 
     updateOffsets() {
-        this.element_height = this.height / 4 / 3;
-        let element_offset = this.element_height / 2;
+        const treeRowMaxHeight = this.height / 4 / 2; // 4 ages, two rows per age
+        this.element_height = treeRowMaxHeight * 0.8; // Configurable
+        let element_offset = (this.height - (this.padding * 2) - (this.element_height * 8)) / 7;
 
         this.offsets.dark_1 = this.padding;
         this.offsets.dark_2 = this.offsets.dark_1 + this.element_height + element_offset;

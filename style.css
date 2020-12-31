@@ -124,6 +124,11 @@ a, a:hover, a:visited, a:active {
     overflow-x: scroll;
 }
 
+.node {
+    /* content-visibility: auto; */
+    contain: strict;
+}
+
 #metainfo {
     border-right: 6px solid #4d3617;
     border-right: none;

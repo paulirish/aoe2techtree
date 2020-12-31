@@ -575,6 +575,7 @@ function enable(buildings, units, techs) {
 
 function formatName(originalname) {
     let name = originalname.toString();
+    return name;
     if (name.length > 10) {
         let space = originalname.indexOf(" ");
         if (space !== -1) {
@@ -700,7 +701,7 @@ function getDefaultTree() {
     stablelane.rows.castle_1.push(unit(CAMEL_RIDER));
     stablelane.rows.castle_1.push(unit(BATTLE_ELEPHANT));
     stablelane.rows.castle_1.push(unit(STEPPE_LANCER));
-    stablelane.rows.castle_1.push(uniqueunit(XOLOTL_WARRIOR));
+    stablelane.rows.castle_2.push(uniqueunit(XOLOTL_WARRIOR));
     stablelane.rows.castle_1.push(tech(HUSBANDRY));
     stablelane.rows.imperial_1.push(unit(HUSSAR));
     stablelane.rows.imperial_1.push(unit(CAVALIER));
@@ -919,7 +920,7 @@ function getDefaultTree() {
     let farmlane = new Lane();
     farmlane.rows.dark_2.push(building(FARM));
     tree.lanes.push(farmlane);
-    
+
 
     let milllane = new Lane();
     milllane.rows.dark_1.push(building(MILL));
@@ -983,7 +984,7 @@ function getConnections() {
         [u(BATTLE_ELEPHANT), u(ELITE_BATTLE_ELEPHANT)],
         [b(STABLE), u(STEPPE_LANCER)],
         [u(STEPPE_LANCER), u(ELITE_STEPPE_LANCER)],
-        [b(STABLE), u(XOLOTL_WARRIOR)],
+        // [b(STABLE), u(XOLOTL_WARRIOR)],
         [b(STABLE), t(HUSBANDRY)],
         [u(KNIGHT), u(CAVALIER)],
         [u(CAVALIER), u(PALADIN)],

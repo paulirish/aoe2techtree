@@ -92,6 +92,16 @@
                     <div id="helptext__x_ref"><h3>Civilizations</h3></div>
                 </details>
               </div>
+              <!-- <svg xmlns="http://www.w3.org/2000/svg" style="
+  height: 90px;
+  outline: 4px solid red;
+  width: 100%;
+  pointer-events: none;
+  content-visibility: auto;
+" viewBox="0 0 7033 500">
+
+  <use href="#root" x="0" fill="blue"></use>
+</svg> -->
         </div>
     </div>
 </div>
@@ -212,36 +222,40 @@
             for (let r of Object.keys(lane.rows)) {
                 let row = lane.rows[r];
                 for (let caret of row) {
-                    var item = draw.group().attr({id: caret.id}).addClass('node')
+                    var item = draw.nested().attr({id: caret.id}).addClass('node')
                     var rect = item.rect(caret.width, caret.height).attr({
                         fill: caret.type.colour,
                         id: `${caret.id}_bg`
                     }).move(caret.x, caret.y);
+
+                    // append everything to the bg rect
+                    // item = rect;
+
                     let name = formatName(caret.name);
                      var image_placeholder = item.rect(caret.width * 0.75, caret.height * 0.75)
                         .attr({fill: '#000000', opacity:0.5, id: caret.id + '_imgph'})
-                        .move(caret.x + caret.width * 0.125, caret.y);
+                        .x(caret.x).y(caret.y)
                     let prefix = 'img/';
                     var image = item.image(prefix + imagePrefix(caret.id) + '.png', caret.width * 0.75, caret.height * 0.75)
                         .attr({id: caret.id + '_img'})
-                        .move(caret.x + caret.width * 0.125, caret.y);
+                        .x(caret.x).y(caret.y)
                     var cross = item.polygon([1, 0, 3, 2, 5, 0, 6, 1, 4, 3, 6, 5, 5, 6, 3, 4, 1, 6, 0, 5, 2, 3, 0, 1])
                         .attr({fill: '#ff0000', opacity:0.5, id: caret.id + '_x'})
                         .addClass('cross')
-                        .size(caret.width * 0.75, caret.height * 0.75)
-                        .move(caret.x + caret.width * 0.125, caret.y);
+                        .width(6).height(6)
+                        .x(caret.x).y(caret.y)
                     var textbg = item.rect(caret.width, caret.height - (caret.height / 1.5)).attr({
                         fill: caret.type.colour,
                         id: `${caret.id}_textbg`
-                    }).move(caret.x, caret.y + caret.height / 1.5);
+                    }).x(caret.x).y(caret.y)
                     var text = item.text(name.toString())
                         .font({size: 9, weight: 'bold'})
                         .attr({fill: '#ffffff', opacity:0.95, 'text-anchor': 'middle', id: caret.id + '_text'})
-                        .move(caret.x + caret.width / 2, caret.y + caret.height / 1.5);
+                        .x(caret.x).y(caret.y)
                    var overlaytrigger = item.rect(caret.width, caret.height)
                         .attr({id: caret.id + '_overlay'})
                         .addClass('node__overlay')
-                        .move(caret.x, caret.y)
+                        .x(caret.x).y(caret.y)
                         .data({'type': caret.type.type, 'caret': caret, 'name': caret.name, 'id': caret.id})
                         .mouseover(function () {
                             highlightPath(caret.id);
@@ -551,7 +565,7 @@
     /**
      * Create the Cross-Reference badges. This is done at load time in order to avoid re-making the
      * badges at runtime per-click on a new unit.
-     * 
+     *
      * @return A container with buttons + images for each civ to be used in cross referencing.
      */
      function createXRefBadges() {
@@ -577,10 +591,10 @@
         xRef.appendChild(xRefLinks)
     }
 
-    /** 
+    /**
      * Set on/off of all cross reference badges for a single unit.
-     * 
-     * @param {string} name The name of the entity being cross-referenced. 
+     *
+     * @param {string} name The name of the entity being cross-referenced.
      * @param {string} id The id of the entity being cross-referenced.
      * @param {string} type The type of the entity being cross-referenced.
      */
@@ -606,7 +620,7 @@
                 }
                 if (type === "UNIT") {
                     // There are 2 ways for a UNIT to be disabled.
-                    //      1. The unit is disabled by default, and not 
+                    //      1. The unit is disabled by default, and not
                     //         specifically enabled in the config.
                     //      2. The unit is disabled in the specific config.
                     if (defaultDisabledUnits.map((id)=>`unit_${id}`).includes(id) &&
@@ -628,7 +642,7 @@
                          !('unit_'+unique[0] === id || 'unit_'+unique[1] === id)) &&
                         (!enabled || !enabled['units'] ||
                          !enabled['units'].map((id)=>`unit_${id}`).includes(id))) {
-                        found = false;    
+                        found = false;
                     }
                 } else if (type === "TECHNOLOGY") {
                     // Unique Technologies are disabled by default
@@ -644,7 +658,7 @@
                 }
                 else if (type === "BUILDING") {
                     // There are 2 ways for a BUILDING to be disabled.
-                    //      1. The building is disabled by default, and not 
+                    //      1. The building is disabled by default, and not
                     //         specifically enabled in the config.
                     //      2. The building is disabled in the specific config.
                     if (defaultDisabledBuildings.map((id)=>`building_${id}`).includes(id) &&
